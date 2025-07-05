@@ -1,23 +1,23 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    {% include 'recipes/partials/_head.html' %}
-    <body>
-        <header class="main-header-container">
-            <div class="main-header container">
-                <h1>
-                    <a href="/" class="main-logo">
-                        <i class="fas fa-address-book main-logo-icon"></i>
-                        <span class="main-logo-text"> Recipes </span>
-                    </a>
-                </h1>
-            </div>
-        </header>
-
-        {% for recipe in recipes %}
-        <div>
-            <h2>{{ recipe.name }}</h2>
-            <p>ID: {{ recipe.id }}</p>
-        </div>
-        {% endfor %}
-    </body>
+  {% include 'recipes/partials/_head.html' %}
+  <body>
+    {% include 'recipes/partials/_header.html' %}
+    <div class="search-container">
+      <div class="container">
+        <form class="search-form" action="">
+          <input
+            type="text"
+            name="search"
+            id="search"
+            placeholder="Search for a recipe"
+            class="search-input"
+          />
+          <button type="submit" class="search-button">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
 </html>
