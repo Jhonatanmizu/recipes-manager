@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+    {% include 'recipes/partials/_head.html' %}
+    <body>
+        <header class="main-header-container">
+            <div class="main-header container">
+                <h1>
+                    <a href="/" class="main-logo">
+                        <i class="fas fa-address-book main-logo-icon"></i>
+                        <span class="main-logo-text"> Recipes </span>
+                    </a>
+                </h1>
+            </div>
+        </header>
+
+        {% for recipe in recipes %}
+        <div>
+            <h2>{{ recipe.name }}</h2>
+            <p>ID: {{ recipe.id }}</p>
+        </div>
+        {% endfor %}
+    </body>
+</html>

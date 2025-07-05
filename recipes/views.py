@@ -9,7 +9,7 @@ def index(request):
             {'id': 3, 'name': 'Caesar Salad'}
         ]
     }
-    return render(request, 'recipes/index.html', context)
+    return render(request, 'recipes/pages/index.html', context)
 
 def detail(request, recipe_id):
     return render(request, 'recipes/detail.html', {'recipe_id': recipe_id})
