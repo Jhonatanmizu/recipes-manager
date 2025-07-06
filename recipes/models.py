@@ -1,9 +1,19 @@
 from django.db import models
 
+
+class RecipeCategory(models.Model):
+    class Meta:
+        verbose_name = "Recipe Category"
+        verbose_name_plural = "Recipe Categories"
+
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+
+
 class Recipe(models.Model):
     class Meta:
-        verbose_name = 'Recipe'
-        verbose_name_plural = 'Recipes'
+        verbose_name = "Recipe"
+        verbose_name_plural = "Recipes"
 
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -14,6 +24,7 @@ class Recipe(models.Model):
     instructions = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(unique=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.title
