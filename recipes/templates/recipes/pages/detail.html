@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-  <body>
-    {% include "recipes/partials/_head.html" %} 
-    {% include "recipes/partials/_header.html" %} 
-    {% include "recipes/partials/_search.html" %}
-    <main class="main-content-container">
-      <div class="main-content main-content-detail container">
-        {% include "recipes/partials/_recipes.html" %}
-      </div>
-    </main>
-    {% include "recipes/partials/_footer.html" %}
-  </body>
-</html>
+{% extends 'base.html' %}
+{% block title %}
+  {{ recipe.title }}
+{% endblock %}
+{% block content %}
+  <div class="main-content-container">
+    <div class="main-content main-content-detail container">
+      {% include 'recipes/partials/_recipes.html' %}
+    </div>
+  </div>
+{% endblock %}
