@@ -1,23 +1,18 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
+from .utils import factory
+
 
 def index(request: HttpRequest) -> HttpResponse:
-    context = {
-        "title": "Recipes",
-        "recipes": [
-            {"id": 1, "name": "Spaghetti Bolognese"},
-            {"id": 2, "name": "Chicken Alfredo"},
-            {"id": 3, "name": "Caesar Salad"},
-        ],
-    }
+    recipes = [factory.make_recipe() for _ in range(20)]
+    context = {"title": "Recipes", "recipes": recipes}
     return render(request, "recipes/pages/index.html", context)
 
 
 def detail(request: HttpRequest, pk: int) -> HttpResponse:
-    context = {
-        "recipe_id": pk,
-    }
+    recipe = factory.make_recipe()
+    context = {"recipe_id": pk, "recipe": recipe}
     return render(request, "recipes/pages/detail.html", context)
 
 
