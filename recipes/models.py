@@ -24,7 +24,8 @@ class Recipe(models.Model):
     instructions = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, null=False, default="")
+    categories = models.ManyToManyField(RecipeCategory)
 
     def __str__(self) -> str:
         return self.title
