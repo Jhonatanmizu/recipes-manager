@@ -169,7 +169,10 @@ h6 {
   padding: var(--spacing-gutter-medium);
   padding-bottom: 2rem;
 }
-
+.recipe-title-container a {
+  text-decoration: none;
+  color: var(--color-primary-dark);
+}
 .recipe-author {
   padding: 0 var(--spacing-gutter-medium);
 }
@@ -228,8 +231,8 @@ h6 {
   filter: brightness(2);
 }
 
-.recipe .preparation-steps{
-  padding:var(--spacing-gutter-medium);
+.recipe .preparation-steps {
+  padding: var(--spacing-gutter-medium);
 }
 
 .main-content-detail .recipe-list-item {
