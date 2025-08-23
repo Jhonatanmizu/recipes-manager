@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -8,6 +9,8 @@ class RecipeCategory(models.Model):
 
     name = models.CharField(max_length=255)
     description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
 
 
 class Recipe(models.Model):
@@ -15,17 +18,22 @@ class Recipe(models.Model):
         verbose_name = "Recipe"
         verbose_name_plural = "Recipes"
 
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    preparation_time = models.PositiveIntegerField()
-    cooking_time = models.PositiveIntegerField()
-    servings = models.PositiveIntegerField()
-    ingredients = models.TextField()
-    instructions = models.TextField()
+    title = models.CharField(max_length=65)
+    description = models.CharField(max_length=165)
+    slug = models.SlugField()
+    preparation_time = models.IntegerField()
+    preparation_time_unit = models.CharField(max_length=65)
+    servings = models.IntegerField()
+    servings_unit = models.CharField(max_length=65)
+    preparation_steps = models.TextField()
+    preparation_steps_is_html = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    slug = models.SlugField(unique=True, null=False, default="")
-    categories = models.ManyToManyField(RecipeCategory)
+    deleted_at = models.DateTimeField(null=True)
+    is_published = models.BooleanField(default=False)
+    cover = models.ImageField(upload_to="recipes/covers/%Y/%m/%d/")
+    category = models.ForeignKey(RecipeCategory, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     def __str__(self) -> str:
         return self.title

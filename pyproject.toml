@@ -9,6 +9,7 @@ dependencies = [
     "django-stubs-ext>=5.2.1",
     "django-types>=0.21.0",
     "faker>=37.4.0",
+    "pillow>=11.3.0",
 ]
 
 
