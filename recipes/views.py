@@ -10,7 +10,7 @@ def get_recipe_or_404(pk: int | None = None) -> Recipe | list[Recipe]:
 
 
 def index(request: HttpRequest) -> HttpResponse:
-    recipes = get_recipe_or_404(pk=None)
+    recipes =  Recipe.objects.filter(is_published=True).order_by("-created_at")
     context = {"title": "Recipes", "recipes": recipes}
     return render(request, "recipes/pages/index.html", context)
 
