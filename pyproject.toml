@@ -10,11 +10,14 @@ dependencies = [
     "django-types>=0.21.0",
     "faker>=37.4.0",
     "pillow>=11.3.0",
+    "pytest>=8.4.1",
+    "pytest-django>=4.11.1",
+    "pytest-watch>=4.2.0",
 ]
 
 
 [project.optional-dependencies]
-dev = ["ruff", "pytest", "pytest-xdist", "pyright"]
+dev = ["ruff", "pyright"]
 
 
 [tool.ruff]
