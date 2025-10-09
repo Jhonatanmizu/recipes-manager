@@ -1,17 +1,22 @@
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, get_list_or_404
+from .models import Recipe
 
-from .utils import factory
+def get_recipe_or_404(pk: int | None = None) -> Recipe | list[Recipe]:
+    if pk:
+        recipe = get_object_or_404(Recipe, pk=pk, is_published=True)
+        return recipe
+    return get_list_or_404(Recipe, is_published=True)
 
 
 def index(request: HttpRequest) -> HttpResponse:
-    recipes = [factory.make_recipe() for _ in range(20)]
+    recipes = get_recipe_or_404(pk=None)
     context = {"title": "Recipes", "recipes": recipes}
     return render(request, "recipes/pages/index.html", context)
 
 
 def detail(request: HttpRequest, pk: int) -> HttpResponse:
-    recipe = factory.make_recipe()
+    recipe = get_recipe_or_404(pk=pk)
     context = {"recipe_id": pk, "recipe": recipe}
     return render(request, "recipes/pages/detail.html", context)
 
@@ -34,3 +39,9 @@ def edit(request: HttpRequest, recipe_id: str) -> HttpResponse:
 
 def delete(request: HttpRequest, recipe_id: str) -> HttpResponse:
     return render(request, "recipes/delete.html", {"recipe_id": recipe_id})
+
+def category(request: HttpRequest, pk: int) -> HttpResponse:
+    recipes = Recipe.objects.filter(category__pk=pk, is_published=True).order_by("-created_at")
+    context = {"title": "Recipes", "recipes": recipes}
+    return render(request, "recipes/pages/category.html", context)
+
