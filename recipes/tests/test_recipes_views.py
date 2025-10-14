@@ -44,6 +44,14 @@ class RecipeViewsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn("No recipes found here.", response.content.decode("utf-8"))
 
+    def test_index_has_correct_context(self):
+        response = self.client.get(reverse("recipes:index"))
+        self.assertIn("recipes", response.context)
+        self.assertEqual(
+            list(response.context["recipes"]),
+            list(Recipe.objects.filter(is_published=True).order_by("-id")[:6]),
+        )
+
     # ========================
     # Category View Tests
     # ========================
@@ -63,6 +71,20 @@ class RecipeViewsTestCase(TestCase):
         url = reverse("recipes:category", kwargs={"pk": non_existent_id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
+
+    def test_category_view_has_correct_context(self):
+        url = reverse("recipes:category", kwargs={"pk": self.category.pk})
+        response = self.client.get(url)
+        self.assertIn("recipes", response.context)
+        self.assertEqual(
+            list(response.context["recipes"]),
+            list(
+                Recipe.objects.filter(
+                    category=self.category,
+                    is_published=True,
+                )
+            ),
+        )
 
     # ========================
     # Detail View Tests
