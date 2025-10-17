@@ -10,8 +10,8 @@ class RecipeViewsTestCase(TestCase):
         self.category = RecipeCategory.objects.create(name="Main Category")
         self.recipes = self._create_recipes(self.category)
 
-    def _create_recipes(self, category) -> list[Recipe]:
-        recipes = [
+    def _create_recipes(self, category: RecipeCategory) -> list[Recipe]:
+        return [
             Recipe.objects.create(
                 title=f"Recipe {i}",
                 description="Delicious recipe",
@@ -24,27 +24,26 @@ class RecipeViewsTestCase(TestCase):
             )
             for i in range(1, 6)
         ]
-        return recipes
 
     # ========================
     # Index View Tests
     # ========================
 
-    def test_index_view_resolves_to_correct_function(self):
+    def test_index_view_resolves_to_correct_function(self) -> None:
         view = resolve(reverse("recipes:index"))
         self.assertIs(view.func, recipe_views.index)
 
-    def test_index_view_returns_200_when_recipes_exist(self):
+    def test_index_view_returns_200_when_recipes_exist(self) -> None:
         response = self.client.get(reverse("recipes:index"))
         self.assertEqual(response.status_code, 200)
 
-    def test_index_view_shows_message_when_no_recipes_exist(self):
+    def test_index_view_shows_message_when_no_recipes_exist(self) -> None:
         Recipe.objects.all().delete()
         response = self.client.get(reverse("recipes:index"))
         self.assertEqual(response.status_code, 200)
         self.assertIn("No recipes found here.", response.content.decode("utf-8"))
 
-    def test_index_has_correct_context(self):
+    def test_index_has_correct_context(self) -> None:
         response = self.client.get(reverse("recipes:index"))
         self.assertIn("recipes", response.context)
         self.assertEqual(
@@ -56,23 +55,23 @@ class RecipeViewsTestCase(TestCase):
     # Category View Tests
     # ========================
 
-    def test_category_view_resolves_to_correct_function(self):
+    def test_category_view_resolves_to_correct_function(self) -> None:
         url = reverse("recipes:category", kwargs={"pk": self.category.pk})
         view = resolve(url)
         self.assertIs(view.func, recipe_views.category)
 
-    def test_category_view_returns_200_when_category_exists(self):
+    def test_category_view_returns_200_when_category_exists(self) -> None:
         url = reverse("recipes:category", kwargs={"pk": self.category.pk})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
-    def test_category_view_returns_404_when_category_does_not_exist(self):
+    def test_category_view_returns_404_when_category_does_not_exist(self) -> None:
         non_existent_id = self.category.pk + 999
         url = reverse("recipes:category", kwargs={"pk": non_existent_id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
-    def test_category_view_has_correct_context(self):
+    def test_category_view_has_correct_context(self) -> None:
         url = reverse("recipes:category", kwargs={"pk": self.category.pk})
         response = self.client.get(url)
         self.assertIn("recipes", response.context)
@@ -90,19 +89,19 @@ class RecipeViewsTestCase(TestCase):
     # Detail View Tests
     # ========================
 
-    def test_detail_view_resolves_to_correct_function(self):
+    def test_detail_view_resolves_to_correct_function(self) -> None:
         recipe = self.recipes[0]
         url = reverse("recipes:detail", kwargs={"pk": recipe.pk})
         view = resolve(url)
         self.assertIs(view.func, recipe_views.detail)
 
-    def test_detail_view_returns_200_when_recipe_exists(self):
+    def test_detail_view_returns_200_when_recipe_exists(self) -> None:
         recipe = self.recipes[0]
         url = reverse("recipes:detail", kwargs={"pk": recipe.pk})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
-    def test_detail_view_returns_404_when_recipe_does_not_exist(self):
+    def test_detail_view_returns_404_when_recipe_does_not_exist(self) -> None:
         non_existent_id = max(r.pk for r in self.recipes) + 999
         url = reverse("recipes:detail", kwargs={"pk": non_existent_id})
         response = self.client.get(url)
