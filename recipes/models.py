@@ -2,9 +2,11 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import slugify
 
+from core.models import BaseModel
 
-class RecipeCategory(models.Model):
-    class Meta:
+
+class RecipeCategory(BaseModel):
+    class Meta(BaseModel.Meta):
         verbose_name = "Recipe Category"
         verbose_name_plural = "Recipe Categories"
 
@@ -17,8 +19,8 @@ class RecipeCategory(models.Model):
         return self.name
 
 
-class Recipe(models.Model):
-    class Meta:
+class Recipe(BaseModel):
+    class Meta(BaseModel.Meta):
         verbose_name = "Recipe"
         verbose_name_plural = "Recipes"
 
