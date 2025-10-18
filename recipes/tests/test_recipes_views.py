@@ -32,6 +32,16 @@ class RecipeViewsTestCase(RecipeTestBase):
             list(Recipe.objects.filter(is_published=True).order_by("-id")[:6]),
         )
 
+    def test_index_shows_only_published_recipes(self) -> None:
+        not_published_recipe = self.recipes[0]
+        not_published_recipe.is_published = False
+        not_published_recipe.save()
+        response = self.client.get(reverse("recipes:index"))
+        self.assertNotIn(
+            Recipe.objects.filter(is_published=False).first(),
+            response.context["recipes"],
+        )
+
     # ========================
     # Category View Tests
     # ========================
@@ -66,6 +76,17 @@ class RecipeViewsTestCase(RecipeTestBase):
             ),
         )
 
+    def test_category_view_shows_only_published_recipes(self) -> None:
+        not_published_recipe = self.recipes[0]
+        not_published_recipe.is_published = False
+        not_published_recipe.save()
+        url = reverse("recipes:category", kwargs={"pk": self.category.pk})
+        response = self.client.get(url)
+        self.assertNotIn(
+            Recipe.objects.filter(is_published=False).first(),
+            response.context["recipes"],
+        )
+
     # ========================
     # Detail View Tests
     # ========================
@@ -87,3 +108,18 @@ class RecipeViewsTestCase(RecipeTestBase):
         url = reverse("recipes:detail", kwargs={"pk": non_existent_id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
+
+    def test_detail_view_shows_only_published_recipe(self) -> None:
+        not_published_recipe = self.recipes[0]
+        not_published_recipe.is_published = False
+        not_published_recipe.save()
+        url = reverse("recipes:detail", kwargs={"pk": not_published_recipe.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_detail_view_has_correct_context(self) -> None:
+        recipe = self.recipes[0]
+        url = reverse("recipes:detail", kwargs={"pk": recipe.pk})
+        response = self.client.get(url)
+        self.assertIn("recipe", response.context)
+        self.assertEqual(response.context["recipe"], recipe)
