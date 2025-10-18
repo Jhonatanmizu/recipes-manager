@@ -4,11 +4,9 @@ from django.shortcuts import get_list_or_404, get_object_or_404, render
 from .models import Recipe
 
 
-def get_recipe_or_404(pk: int | None = None) -> Recipe | list[Recipe]:
-    if pk:
-        recipe = get_object_or_404(Recipe, pk=pk, is_published=True)
-        return recipe
-    return get_list_or_404(Recipe, is_published=True)
+def get_recipe_or_404(pk: int) -> Recipe:
+    recipe = get_object_or_404(Recipe, pk=pk, is_published=True)
+    return recipe
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -21,26 +19,6 @@ def detail(request: HttpRequest, pk: int) -> HttpResponse:
     recipe = get_recipe_or_404(pk=pk)
     context = {"recipe_id": pk, "recipe": recipe}
     return render(request, "recipes/pages/detail.html", context)
-
-
-def create(request: HttpRequest) -> HttpResponse:
-    context = {
-        "title": "Recipes",
-        "recipes": [
-            {"id": 1, "name": "Spaghetti Bolognese"},
-            {"id": 2, "name": "Chicken Alfredo"},
-            {"id": 3, "name": "Caesar Salad"},
-        ],
-    }
-    return render(request, "recipes/pages/index.html", context)
-
-
-def edit(request: HttpRequest, recipe_id: str) -> HttpResponse:
-    return render(request, "recipes/edit.html", {"recipe_id": recipe_id})
-
-
-def delete(request: HttpRequest, recipe_id: str) -> HttpResponse:
-    return render(request, "recipes/delete.html", {"recipe_id": recipe_id})
 
 
 def category(request: HttpRequest, pk: int) -> HttpResponse:
