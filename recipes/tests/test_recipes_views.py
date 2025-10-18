@@ -1,30 +1,11 @@
-from django.test import TestCase
 from django.urls import resolve, reverse
 
 from recipes import views as recipe_views
-from recipes.models import Recipe, RecipeCategory
+from recipes.models import Recipe
+from recipes.tests.test_recipes_base import RecipeTestBase
 
 
-class RecipeViewsTestCase(TestCase):
-    def setUp(self) -> None:
-        self.category = RecipeCategory.objects.create(name="Main Category")
-        self.recipes = self._create_recipes(self.category)
-
-    def _create_recipes(self, category: RecipeCategory) -> list[Recipe]:
-        return [
-            Recipe.objects.create(
-                title=f"Recipe {i}",
-                description="Delicious recipe",
-                is_published=True,
-                preparation_time=30,
-                servings=4,
-                preparation_steps="Step 1: Do this. Step 2: Do that.",
-                preparation_steps_is_html=False,
-                category=category,
-            )
-            for i in range(1, 6)
-        ]
-
+class RecipeViewsTestCase(RecipeTestBase):
     # ========================
     # Index View Tests
     # ========================
