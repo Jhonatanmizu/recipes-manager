@@ -129,7 +129,7 @@ class RecipeViewsTestCase(RecipeTestBase):
     # Search View Tests
     # ========================
     def test_search_view_has_correct_function(self) -> None:
-        url = reverse("recipes:search", query={"q": "search_term"})
+        url = reverse("recipes:search")
         view = resolve(url)
         self.assertIs(view.func, recipe_views.search)
 
