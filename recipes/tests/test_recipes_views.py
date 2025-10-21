@@ -1,3 +1,4 @@
+from django.http import HttpResponseNotFound
 from django.urls import resolve, reverse
 
 from recipes import views as recipe_views
@@ -123,3 +124,26 @@ class RecipeViewsTestCase(RecipeTestBase):
         response = self.client.get(url)
         self.assertIn("recipe", response.context)
         self.assertEqual(response.context["recipe"], recipe)
+
+    # ========================
+    # Search View Tests
+    # ========================
+    def test_search_view_has_correct_function(self) -> None:
+        url = reverse("recipes:search", query={"q": "search_term"})
+        view = resolve(url)
+        self.assertIs(view.func, recipe_views.search)
+
+    def test_search_view_return_200_when_has_search_term(self) -> None:
+        url = reverse("recipes:search", query={"q": "search_term"})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_search_view_return_correct_template(self) -> None:
+        url = reverse("recipes:search", query={"q": "search_term"})
+        response = self.client.get(url)
+        self.assertTemplateUsed(response, "recipes/pages/search.html")
+
+    def test_search_view_return_404_when_does_not_have_search_term(self) -> None:
+        url = reverse("recipes:search", query={"q": ""})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, HttpResponseNotFound.status_code)
